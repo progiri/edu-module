@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models.base import ModelStateFieldsCacheDescriptor
 from django.utils import timezone
 
 STATUS_CHOICES = [
