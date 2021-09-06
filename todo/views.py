@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import ToDo
 from .forms import ToDoForm
@@ -19,7 +20,7 @@ def todo_add(request):
             todo.save()
     else:
         form = ToDoForm()
-    return render(request, 'todo/todo_add.html', {"form": form})
+    return JsonResponse({"form": form})
 
 
 def todo_edit(request, pk):
@@ -32,7 +33,7 @@ def todo_edit(request, pk):
             return redirect('todos')
     else:
         form = ToDoForm(instance=todo)
-    return render(request, 'todo/todo_edit.html', {"form": form})
+    return JsonResponse({"form": form})
 
 
 def todo_delete(request, pk):
