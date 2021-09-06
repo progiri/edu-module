@@ -3,10 +3,13 @@ from .models import ToDo
 from .forms import ToDoForm
 
 # Create your views here.
-def todo_list(request):
-    todos = ToDo.objects.filter(user=request.user)
-    return render(request, 'todo/index.html', {"todos": todos})
+def index_page(request):
+    return render(request, 'todo/index.html')
 
+# todo 
+'''
+мында get, post, put, patch, delete запростарға бөлек жағдай(if), қайтару керек JsonResponse();
+'''
 
 def todo_add(request):
     if request.method == "POST":
