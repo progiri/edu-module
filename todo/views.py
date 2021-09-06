@@ -16,7 +16,6 @@ def todo_add(request):
         form = ToDoForm(request.POST)
         if form.is_valid():
             todo = form.save(commit=False)
-            todo.user = request.user
             todo.save()
     else:
         form = ToDoForm()
@@ -25,11 +24,10 @@ def todo_add(request):
 
 def todo_edit(request, pk):
     todo = get_object_or_404(ToDo, pk=pk)
-    if request.method == "POST":
+    if request.method == "PATCH":
         form = ToDoForm(request.POST, instance=todo)
         if form.is_valid():
             todo = form.save(commit=False)
-            todo.user = request.user
             todo.save()
             return redirect('todos')
     else:
@@ -39,7 +37,8 @@ def todo_edit(request, pk):
 
 def todo_delete(request, pk):
     todo = get_object_or_404(ToDo, pk=pk)
-    todo.delete()
+    if request.method == "DELETE":
+        todo.delete()
     return redirect('todos')
 
 
