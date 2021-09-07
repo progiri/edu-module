@@ -1,16 +1,15 @@
 from django.http.response import JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
+
 from .models import ToDo
 from .forms import ToDoForm
 
 # Create your views here.
-def index_page(request):
-    return render(request, 'todo/index.html')
 
-# todo 
-'''
-мында get, post, put, patch, delete запростарға бөлек жағдай(if), қайтару керек JsonResponse();
-'''
+
+def index_page(request):
+    return render(request, 'build/index.html')
+
 
 def todos(request, pk=None):
     if request.method == "GET":
@@ -24,7 +23,7 @@ def todos(request, pk=None):
             todo.save()
             return JsonResponse({"todo": todo})
         return JsonResponse({"todo": "Form is not valid"})
-        
+
     if request.method == "PATCH":
         todo = get_object_or_404(ToDo, pk=pk)
         form = ToDoForm(request.POST, instance=todo)
@@ -38,5 +37,3 @@ def todos(request, pk=None):
         todo = get_object_or_404(ToDo, pk=pk)
         todo.delete()
         return JsonResponse({"todo": "deleted"})
-
-

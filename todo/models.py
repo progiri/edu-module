@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 STATUS_CHOICES = [
@@ -8,9 +7,10 @@ STATUS_CHOICES = [
     (3, 'Complete')
 ]
 
+
 class ToDo(models.Model):
     title = models.CharField(
-        max_length=1500,
+        max_length=255,
         verbose_name='Task name'
     )
     status = models.PositiveSmallIntegerField(
@@ -27,7 +27,3 @@ class ToDo(models.Model):
 
     def __str__(self) -> str:
         return self.title
-
-    
-
-
