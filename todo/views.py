@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, render
 from .models import ToDo
 from .forms import ToDoForm
 
+import json
+
 # Create your views here.
 
 
@@ -17,26 +19,36 @@ def todos(request, pk=None):
         return JsonResponse({"todo": list(todo)})
 
     if request.method == "POST":
-        form = ToDoForm(request.POST)
-        print(request.POST)
-        print(f"\n\nform: {form}\n\n")
+        data = json.loads(request.body.decode())
+
+        form = ToDoForm(data)
 
         if form.is_valid():
             todo = form.save(commit=False)
             todo.save()
-            return JsonResponse({"code": 1, "todo": todo})
+            return JsonResponse({"code": 1, "todo": {"title": todo.title, "status": todo.status, "id": todo.id}})
+
         return JsonResponse({"code": -1, "todo": "Form is not valid"})
 
     if request.method == "PATCH":
-        todo = get_object_or_404(ToDo, pk=pk)
-        form = ToDoForm(request.POST, instance=todo)
-        if form.is_valid():
-            todo = form.save(commit=False)
-            todo.save()
-            return JsonResponse({"todo": todo})
-        return JsonResponse({"todo": "Form is not valid"})
+        data = json.loads(request.body.decode())
+
+        todo = get_object_or_404(ToDo, pk=data["id"])
+        # form = ToDoForm(data, instance=todo)
+
+        # if form.is_valid():
+        #     todo = form.save(commit=False)
+
+        todo.status = data["status"]
+
+        todo.save()
+        return JsonResponse({"code": 1, "todo": {"title": todo.title, "status": todo.status, "id": todo.id}})
+        # return JsonResponse({"todo": "Form is not valid"})
 
     if request.method == "DELETE":
-        todo = get_object_or_404(ToDo, pk=pk)
+        data = json.loads(request.body.decode())
+
+        todo = get_object_or_404(ToDo, pk=data["id"])
         todo.delete()
+
         return JsonResponse({"todo": "deleted"})
