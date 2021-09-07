@@ -18,11 +18,14 @@ def todos(request, pk=None):
 
     if request.method == "POST":
         form = ToDoForm(request.POST)
+        print(request.POST)
+        print(f"\n\nform: {form}\n\n")
+
         if form.is_valid():
             todo = form.save(commit=False)
             todo.save()
-            return JsonResponse({"todo": todo})
-        return JsonResponse({"todo": "Form is not valid"})
+            return JsonResponse({"code": 1, "todo": todo})
+        return JsonResponse({"code": -1, "todo": "Form is not valid"})
 
     if request.method == "PATCH":
         todo = get_object_or_404(ToDo, pk=pk)
