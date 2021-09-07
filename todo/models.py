@@ -9,12 +9,6 @@ STATUS_CHOICES = [
 ]
 
 class ToDo(models.Model):
-    user = models.ForeignKey(
-        get_user_model(), 
-        on_delete=models.CASCADE,
-        related_name='todos',
-        verbose_name='ToDo'
-    )
     title = models.CharField(
         max_length=1500,
         verbose_name='Task name'
@@ -24,7 +18,7 @@ class ToDo(models.Model):
     )
     created_date = models.DateTimeField(
         verbose_name='Created date',
-        default=timezone.now()
+        default=timezone.now
     )
 
     class Meta:
@@ -32,7 +26,7 @@ class ToDo(models.Model):
         verbose_name_plural = 'ToDos'
 
     def __str__(self) -> str:
-        return self.task_name
+        return self.title
 
     
 

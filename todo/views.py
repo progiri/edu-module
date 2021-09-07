@@ -12,34 +12,31 @@ def index_page(request):
 мында get, post, put, patch, delete запростарға бөлек жағдай(if), қайтару керек JsonResponse();
 '''
 
-def todo_add(request):
+def todos(request, pk=None):
+    if request.method == "GET":
+        todo = ToDo.objects.all().values()
+        return JsonResponse({"todo": list(todo)})
+
     if request.method == "POST":
         form = ToDoForm(request.POST)
         if form.is_valid():
             todo = form.save(commit=False)
             todo.save()
-    else:
-        form = ToDoForm()
-    return JsonResponse({"form": form})
-
-
-def todo_edit(request, pk):
-    todo = get_object_or_404(ToDo, pk=pk)
+            return JsonResponse({"todo": todo})
+        return JsonResponse({"todo": "Form is not valid"})
+        
     if request.method == "PATCH":
+        todo = get_object_or_404(ToDo, pk=pk)
         form = ToDoForm(request.POST, instance=todo)
         if form.is_valid():
             todo = form.save(commit=False)
             todo.save()
-            return redirect('todos')
-    else:
-        form = ToDoForm(instance=todo)
-    return JsonResponse({"form": form})
+            return JsonResponse({"todo": todo})
+        return JsonResponse({"todo": "Form is not valid"})
 
-
-def todo_delete(request, pk):
-    todo = get_object_or_404(ToDo, pk=pk)
     if request.method == "DELETE":
+        todo = get_object_or_404(ToDo, pk=pk)
         todo.delete()
-    return redirect('todos')
+        return JsonResponse({"todo": "deleted"})
 
 
