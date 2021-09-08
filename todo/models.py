@@ -1,12 +1,11 @@
 from django.db import models
-from django.utils import timezone
+
 
 STATUS_CHOICES = [
     (1, 'ToDo'),
     (2, 'InProgress'),
     (3, 'Complete')
 ]
-
 
 class ToDo(models.Model):
     title = models.CharField(
@@ -18,7 +17,7 @@ class ToDo(models.Model):
     )
     created_date = models.DateTimeField(
         verbose_name='Created date',
-        default=timezone.now
+        auto_now_add=True
     )
 
     class Meta:
